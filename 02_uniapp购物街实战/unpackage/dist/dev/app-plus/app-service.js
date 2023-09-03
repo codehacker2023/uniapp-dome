@@ -1705,24 +1705,58 @@ This will fail in production if not fixed.`);
     }
     return target;
   };
+  const _sfc_main$5 = {
+    __name: "home_banner",
+    props: {
+      banners: {
+        type: Array,
+        default: () => [1, 2, 3, 4]
+      }
+    },
+    setup(__props) {
+      return (_ctx, _cache) => {
+        return vue.openBlock(), vue.createElementBlock("swiper", {
+          class: "banner",
+          "indicator-dots": true,
+          "indicator-active-color": "#ff8198",
+          autoplay: true,
+          interval: 3e3,
+          duration: 1e3
+        }, [
+          (vue.openBlock(true), vue.createElementBlock(
+            vue.Fragment,
+            null,
+            vue.renderList(__props.banners, (item) => {
+              return vue.openBlock(), vue.createElementBlock("swiper-item", { key: item }, [
+                vue.createElementVNode(
+                  "text",
+                  null,
+                  vue.toDisplayString(item),
+                  1
+                  /* TEXT */
+                )
+              ]);
+            }),
+            128
+            /* KEYED_FRAGMENT */
+          ))
+        ]);
+      };
+    }
+  };
+  const HomeBanner = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["__scopeId", "data-v-a7f4cbfa"], ["__file", "/Users/yihualiu/Documents/HBuilderProjects/02_uniapp购物街实战/pages/home/cpns/home_banner.vue"]]);
   const _sfc_main$4 = {
     __name: "home",
     setup(__props) {
       const homeStore = useHomeStore();
-      const {
-        banners
-      } = storeToRefs(homeStore);
+      storeToRefs(homeStore);
       onLoad(() => {
         homeStore.fetchHomeMutidataAction();
       });
       return (_ctx, _cache) => {
-        return vue.openBlock(), vue.createElementBlock(
-          "view",
-          null,
-          vue.toDisplayString(vue.unref(banners)),
-          1
-          /* TEXT */
-        );
+        return vue.openBlock(), vue.createElementBlock("view", { class: "home" }, [
+          vue.createVNode(HomeBanner)
+        ]);
       };
     }
   };

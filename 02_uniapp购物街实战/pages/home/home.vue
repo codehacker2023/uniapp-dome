@@ -1,6 +1,6 @@
 <template>
-	<view>
-		{{ banners }}
+	<view class="home">
+		<home-banner :banners="banners" @bannerItemClick="handleBannerItemClick"></home-banner>
 	</view>
 </template>
 
@@ -14,7 +14,7 @@
 	import {
 		useHomeStore
 	} from '@/store/home.js'
-
+	import HomeBanner from './cpns/home_banner.vue'
 	const homeStore = useHomeStore()
 	const {
 		banners
@@ -23,6 +23,15 @@
 	onLoad(() => {
 		homeStore.fetchHomeMutidataAction()
 	})
+
+	// 轮播图的点击事件
+	function handleBannerItemClick(link) {
+		uni.navigateTo({
+			url: '/pages/webview/webview?link=' + link
+		})
+	}
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+
+</style>
