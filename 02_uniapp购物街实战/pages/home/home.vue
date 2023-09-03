@@ -1,6 +1,9 @@
 <template>
 	<view class="home">
+		<!-- 轮播图组件 -->
 		<home-banner :banners="banners" @bannerItemClick="handleBannerItemClick"></home-banner>
+		<!-- 推荐栏组件 -->
+		<home-recommens :recommends="recommends" @itemClik="handleItemClick"></home-recommens>
 	</view>
 </template>
 
@@ -14,10 +17,12 @@
 	import {
 		useHomeStore
 	} from '@/store/home.js'
-	import HomeBanner from './cpns/home_banner.vue'
+	import HomeBanner from './cpns/home-banner.vue'
+	import HomeRecommens from './cpns/home-recommends.vue'
 	const homeStore = useHomeStore()
 	const {
-		banners
+		banners,
+		recommends
 	} = storeToRefs(homeStore)
 
 	onLoad(() => {
@@ -26,6 +31,12 @@
 
 	// 轮播图的点击事件
 	function handleBannerItemClick(link) {
+		uni.navigateTo({
+			url: '/pages/webview/webview?link=' + link
+		})
+	}
+
+	function handleItemClick(link) {
 		uni.navigateTo({
 			url: '/pages/webview/webview?link=' + link
 		})

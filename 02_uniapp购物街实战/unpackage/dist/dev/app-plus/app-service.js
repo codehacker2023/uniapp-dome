@@ -1705,21 +1705,26 @@ This will fail in production if not fixed.`);
     }
     return target;
   };
-  const _sfc_main$5 = {
-    __name: "home_banner",
+  const _sfc_main$7 = {
+    __name: "home-banner",
     props: {
       banners: {
         type: Array,
-        default: () => [1, 2, 3, 4]
+        default: () => []
       }
     },
-    setup(__props) {
+    emits: ["bannerItemClick"],
+    setup(__props, { emit }) {
+      function handleItemClick(item) {
+        emit("bannerItemClick", item.link);
+      }
       return (_ctx, _cache) => {
         return vue.openBlock(), vue.createElementBlock("swiper", {
           class: "banner",
           "indicator-dots": true,
           "indicator-active-color": "#ff8198",
           autoplay: true,
+          circular: true,
           interval: 3e3,
           duration: 1e3
         }, [
@@ -1727,15 +1732,16 @@ This will fail in production if not fixed.`);
             vue.Fragment,
             null,
             vue.renderList(__props.banners, (item) => {
-              return vue.openBlock(), vue.createElementBlock("swiper-item", { key: item }, [
-                vue.createElementVNode(
-                  "text",
-                  null,
-                  vue.toDisplayString(item),
-                  1
-                  /* TEXT */
-                )
-              ]);
+              return vue.openBlock(), vue.createElementBlock("swiper-item", {
+                key: item,
+                onClick: ($event) => handleItemClick(item)
+              }, [
+                vue.createElementVNode("image", {
+                  class: "image",
+                  src: item.image,
+                  mode: "widthFix"
+                }, null, 8, ["src"])
+              ], 8, ["onClick"]);
             }),
             128
             /* KEYED_FRAGMENT */
@@ -1744,24 +1750,92 @@ This will fail in production if not fixed.`);
       };
     }
   };
-  const HomeBanner = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["__scopeId", "data-v-a7f4cbfa"], ["__file", "/Users/yihualiu/Documents/HBuilderProjects/02_uniapp购物街实战/pages/home/cpns/home_banner.vue"]]);
-  const _sfc_main$4 = {
-    __name: "home",
-    setup(__props) {
-      const homeStore = useHomeStore();
-      storeToRefs(homeStore);
-      onLoad(() => {
-        homeStore.fetchHomeMutidataAction();
-      });
+  const HomeBanner = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["__scopeId", "data-v-945d8e98"], ["__file", "/Users/yihualiu/Documents/HBuilderProjects/02_uniapp购物街实战/pages/home/cpns/home-banner.vue"]]);
+  const _sfc_main$6 = {
+    __name: "home-recommends",
+    props: {
+      recommends: {
+        type: Array,
+        default: () => []
+      }
+    },
+    emits: ["itemClik"],
+    setup(__props, { emit }) {
+      function handleItemClick(item) {
+        emit("itemClik", item.link);
+      }
       return (_ctx, _cache) => {
-        return vue.openBlock(), vue.createElementBlock("view", { class: "home" }, [
-          vue.createVNode(HomeBanner)
+        return vue.openBlock(), vue.createElementBlock("view", { class: "recommend" }, [
+          (vue.openBlock(true), vue.createElementBlock(
+            vue.Fragment,
+            null,
+            vue.renderList(__props.recommends, (item) => {
+              return vue.openBlock(), vue.createElementBlock("view", {
+                key: item,
+                class: "recommend-item",
+                onClick: ($event) => handleItemClick(item)
+              }, [
+                vue.createElementVNode("image", {
+                  class: "image",
+                  src: item.image,
+                  mode: "widthFix"
+                }, null, 8, ["src"]),
+                vue.createElementVNode(
+                  "view",
+                  { class: "title" },
+                  vue.toDisplayString(item.title),
+                  1
+                  /* TEXT */
+                )
+              ], 8, ["onClick"]);
+            }),
+            128
+            /* KEYED_FRAGMENT */
+          ))
         ]);
       };
     }
   };
-  const PagesHomeHome = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["__file", "/Users/yihualiu/Documents/HBuilderProjects/02_uniapp购物街实战/pages/home/home.vue"]]);
-  const _sfc_main$3 = {
+  const HomeRecommens = /* @__PURE__ */ _export_sfc(_sfc_main$6, [["__scopeId", "data-v-beebefd3"], ["__file", "/Users/yihualiu/Documents/HBuilderProjects/02_uniapp购物街实战/pages/home/cpns/home-recommends.vue"]]);
+  const _sfc_main$5 = {
+    __name: "home",
+    setup(__props) {
+      const homeStore = useHomeStore();
+      const {
+        banners,
+        recommends
+      } = storeToRefs(homeStore);
+      onLoad(() => {
+        homeStore.fetchHomeMutidataAction();
+      });
+      function handleBannerItemClick(link) {
+        uni.navigateTo({
+          url: "/pages/webview/webview?link=" + link
+        });
+      }
+      function handleItemClick(link) {
+        uni.navigateTo({
+          url: "/pages/webview/webview?link=" + link
+        });
+      }
+      return (_ctx, _cache) => {
+        return vue.openBlock(), vue.createElementBlock("view", { class: "home" }, [
+          vue.createCommentVNode(" 轮播图组件 "),
+          vue.createVNode(HomeBanner, {
+            banners: vue.unref(banners),
+            onBannerItemClick: handleBannerItemClick
+          }, null, 8, ["banners"]),
+          vue.createCommentVNode(" 推荐栏组件 "),
+          vue.createVNode(HomeRecommens, {
+            recommends: vue.unref(recommends),
+            onItemClik: handleItemClick
+          }, null, 8, ["recommends"])
+        ]);
+      };
+    }
+  };
+  const PagesHomeHome = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["__file", "/Users/yihualiu/Documents/HBuilderProjects/02_uniapp购物街实战/pages/home/home.vue"]]);
+  const _sfc_main$4 = {
     data() {
       return {};
     },
@@ -1770,8 +1844,8 @@ This will fail in production if not fixed.`);
   function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view");
   }
-  const PagesCategoryCategory = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["render", _sfc_render$2], ["__file", "/Users/yihualiu/Documents/HBuilderProjects/02_uniapp购物街实战/pages/category/category.vue"]]);
-  const _sfc_main$2 = {
+  const PagesCategoryCategory = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["render", _sfc_render$2], ["__file", "/Users/yihualiu/Documents/HBuilderProjects/02_uniapp购物街实战/pages/category/category.vue"]]);
+  const _sfc_main$3 = {
     data() {
       return {};
     },
@@ -1780,8 +1854,8 @@ This will fail in production if not fixed.`);
   function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view");
   }
-  const PagesCartCart = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["render", _sfc_render$1], ["__file", "/Users/yihualiu/Documents/HBuilderProjects/02_uniapp购物街实战/pages/cart/cart.vue"]]);
-  const _sfc_main$1 = {
+  const PagesCartCart = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["render", _sfc_render$1], ["__file", "/Users/yihualiu/Documents/HBuilderProjects/02_uniapp购物街实战/pages/cart/cart.vue"]]);
+  const _sfc_main$2 = {
     data() {
       return {};
     },
@@ -1790,11 +1864,27 @@ This will fail in production if not fixed.`);
   function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view");
   }
-  const PagesProfileProfile = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["render", _sfc_render], ["__file", "/Users/yihualiu/Documents/HBuilderProjects/02_uniapp购物街实战/pages/profile/profile.vue"]]);
+  const PagesProfileProfile = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["render", _sfc_render], ["__file", "/Users/yihualiu/Documents/HBuilderProjects/02_uniapp购物街实战/pages/profile/profile.vue"]]);
+  const _sfc_main$1 = {
+    __name: "webview",
+    props: {
+      link: {
+        type: String,
+        default: ""
+      }
+    },
+    setup(__props) {
+      return (_ctx, _cache) => {
+        return vue.openBlock(), vue.createElementBlock("web-view", { src: __props.link }, null, 8, ["src"]);
+      };
+    }
+  };
+  const PagesWebviewWebview = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__file", "/Users/yihualiu/Documents/HBuilderProjects/02_uniapp购物街实战/pages/webview/webview.vue"]]);
   __definePage("pages/home/home", PagesHomeHome);
   __definePage("pages/category/category", PagesCategoryCategory);
   __definePage("pages/cart/cart", PagesCartCart);
   __definePage("pages/profile/profile", PagesProfileProfile);
+  __definePage("pages/webview/webview", PagesWebviewWebview);
   const _sfc_main = {
     onLaunch: function() {
       formatAppLog("log", "at App.vue:4", "App Launch");
