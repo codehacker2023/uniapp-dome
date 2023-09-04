@@ -9,6 +9,7 @@ class HYRequest {
 				timeout: TIME_OUT,
 				data: data,
 				success(res) {
+					console.log(res.data);
 					resolve(res.data)
 				},
 				fail(err) {

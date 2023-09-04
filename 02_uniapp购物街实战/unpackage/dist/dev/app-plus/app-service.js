@@ -29,7 +29,7 @@ if (typeof uni !== "undefined" && uni && uni.requireGlobal) {
 if (uni.restoreGlobal) {
   uni.restoreGlobal(Vue, weex, plus, setTimeout, clearTimeout, setInterval, clearInterval);
 }
-(function(vue) {
+(function(vue, shared) {
   "use strict";
   const ON_LOAD = "onLoad";
   function formatAppLog(type, filename, ...args) {
@@ -39,10 +39,63 @@ if (uni.restoreGlobal) {
       console[type].apply(console, [...args, filename]);
     }
   }
+  function resolveEasycom(component, easycom) {
+    return shared.isString(component) ? easycom : component;
+  }
   const createHook = (lifecycle) => (hook, target = vue.getCurrentInstance()) => {
     !vue.isInSSRComponentSetup && vue.injectHook(lifecycle, hook, target);
   };
   const onLoad = /* @__PURE__ */ createHook(ON_LOAD);
+  const _export_sfc = (sfc, props) => {
+    const target = sfc.__vccOpts || sfc;
+    for (const [key, val] of props) {
+      target[key] = val;
+    }
+    return target;
+  };
+  const _sfc_main$6 = {
+    __name: "tab-control",
+    props: {
+      titles: {
+        type: Array,
+        default: () => []
+      }
+    },
+    emits: ["tabItemClick"],
+    setup(__props, { emit }) {
+      const currentIndex = vue.ref(0);
+      function handleItemClick(index) {
+        currentIndex.value = index;
+        emit("tabItemClick", index);
+      }
+      return (_ctx, _cache) => {
+        return vue.openBlock(), vue.createElementBlock("view", { class: "tab-contorl" }, [
+          (vue.openBlock(true), vue.createElementBlock(
+            vue.Fragment,
+            null,
+            vue.renderList(__props.titles, (title, index) => {
+              return vue.openBlock(), vue.createElementBlock("view", {
+                key: index,
+                class: vue.normalizeClass(["item", currentIndex.value == index ? "active" : ""]),
+                onClick: ($event) => handleItemClick(index)
+              }, [
+                vue.createElementVNode(
+                  "text",
+                  { class: "title" },
+                  vue.toDisplayString(title),
+                  1
+                  /* TEXT */
+                )
+              ], 10, ["onClick"]);
+            }),
+            128
+            /* KEYED_FRAGMENT */
+          ))
+        ]);
+      };
+    }
+  };
+  const __easycom_0 = /* @__PURE__ */ _export_sfc(_sfc_main$6, [["__scopeId", "data-v-86d07902"], ["__file", "/Users/yihualiu/Documents/HBuilderProjects/02_uniapp购物街实战/components/tab-control/tab-control.vue"]]);
   var isVue2 = false;
   function set(target, key, val) {
     if (Array.isArray(target)) {
@@ -1662,6 +1715,7 @@ This will fail in production if not fixed.`);
           timeout: TIME_OUT,
           data,
           success(res) {
+            formatAppLog("log", "at service/index.js:12", res.data);
             resolve(res.data);
           },
           fail(err) {
@@ -1698,138 +1752,33 @@ This will fail in production if not fixed.`);
       }
     }
   });
-  const _export_sfc = (sfc, props) => {
-    const target = sfc.__vccOpts || sfc;
-    for (const [key, val] of props) {
-      target[key] = val;
-    }
-    return target;
-  };
-  const _sfc_main$7 = {
-    __name: "home-banner",
-    props: {
-      banners: {
-        type: Array,
-        default: () => []
-      }
-    },
-    emits: ["bannerItemClick"],
-    setup(__props, { emit }) {
-      function handleItemClick(item) {
-        emit("bannerItemClick", item.link);
-      }
-      return (_ctx, _cache) => {
-        return vue.openBlock(), vue.createElementBlock("swiper", {
-          class: "banner",
-          "indicator-dots": true,
-          "indicator-active-color": "#ff8198",
-          autoplay: true,
-          circular: true,
-          interval: 3e3,
-          duration: 1e3
-        }, [
-          (vue.openBlock(true), vue.createElementBlock(
-            vue.Fragment,
-            null,
-            vue.renderList(__props.banners, (item) => {
-              return vue.openBlock(), vue.createElementBlock("swiper-item", {
-                key: item,
-                onClick: ($event) => handleItemClick(item)
-              }, [
-                vue.createElementVNode("image", {
-                  class: "image",
-                  src: item.image,
-                  mode: "widthFix"
-                }, null, 8, ["src"])
-              ], 8, ["onClick"]);
-            }),
-            128
-            /* KEYED_FRAGMENT */
-          ))
-        ]);
-      };
-    }
-  };
-  const HomeBanner = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["__scopeId", "data-v-945d8e98"], ["__file", "/Users/yihualiu/Documents/HBuilderProjects/02_uniapp购物街实战/pages/home/cpns/home-banner.vue"]]);
-  const _sfc_main$6 = {
-    __name: "home-recommends",
-    props: {
-      recommends: {
-        type: Array,
-        default: () => []
-      }
-    },
-    emits: ["itemClik"],
-    setup(__props, { emit }) {
-      function handleItemClick(item) {
-        emit("itemClik", item.link);
-      }
-      return (_ctx, _cache) => {
-        return vue.openBlock(), vue.createElementBlock("view", { class: "recommend" }, [
-          (vue.openBlock(true), vue.createElementBlock(
-            vue.Fragment,
-            null,
-            vue.renderList(__props.recommends, (item) => {
-              return vue.openBlock(), vue.createElementBlock("view", {
-                key: item,
-                class: "recommend-item",
-                onClick: ($event) => handleItemClick(item)
-              }, [
-                vue.createElementVNode("image", {
-                  class: "image",
-                  src: item.image,
-                  mode: "widthFix"
-                }, null, 8, ["src"]),
-                vue.createElementVNode(
-                  "view",
-                  { class: "title" },
-                  vue.toDisplayString(item.title),
-                  1
-                  /* TEXT */
-                )
-              ], 8, ["onClick"]);
-            }),
-            128
-            /* KEYED_FRAGMENT */
-          ))
-        ]);
-      };
-    }
-  };
-  const HomeRecommens = /* @__PURE__ */ _export_sfc(_sfc_main$6, [["__scopeId", "data-v-beebefd3"], ["__file", "/Users/yihualiu/Documents/HBuilderProjects/02_uniapp购物街实战/pages/home/cpns/home-recommends.vue"]]);
   const _sfc_main$5 = {
     __name: "home",
     setup(__props) {
       const homeStore = useHomeStore();
-      const {
-        banners,
-        recommends
-      } = storeToRefs(homeStore);
+      storeToRefs(homeStore);
       onLoad(() => {
         homeStore.fetchHomeMutidataAction();
       });
-      function handleBannerItemClick(link) {
-        uni.navigateTo({
-          url: "/pages/webview/webview?link=" + link
-        });
-      }
-      function handleItemClick(link) {
-        uni.navigateTo({
-          url: "/pages/webview/webview?link=" + link
-        });
+      function handleTabItemClick(index) {
+        formatAppLog("log", "at pages/home/home.vue:52", index);
       }
       return (_ctx, _cache) => {
+        const _component_tab_control = resolveEasycom(vue.resolveDynamicComponent("tab-control"), __easycom_0);
         return vue.openBlock(), vue.createElementBlock("view", { class: "home" }, [
           vue.createCommentVNode(" 轮播图组件 "),
-          vue.createVNode(HomeBanner, {
-            banners: vue.unref(banners),
-            onBannerItemClick: handleBannerItemClick
-          }, null, 8, ["banners"]),
+          vue.createCommentVNode(' <home-banner :banners="banners" @bannerItemClick="handleBannerItemClick"></home-banner> '),
           vue.createCommentVNode(" 推荐栏组件 "),
-          vue.createVNode(HomeRecommens, {
-            recommends: vue.unref(recommends),
-            onItemClik: handleItemClick
-          }, null, 8, ["recommends"])
+          vue.createCommentVNode(' <home-recommens :recommends="recommends" @itemClik="handleItemClick"></home-recommens> '),
+          vue.createCommentVNode(' <view class="popularTitle">本周流行</view> '),
+          vue.createCommentVNode(' <home-recommens :recommends="recommends" @itemClik="handleItemClick"></home-recommens> '),
+          vue.createCommentVNode(' <home-recommens :recommends="recommends" @itemClik="handleItemClick"></home-recommens> '),
+          vue.createCommentVNode(" 标签 "),
+          vue.createCommentVNode(" 选项卡组件 "),
+          vue.createVNode(_component_tab_control, {
+            titles: ["流行", "新款", "精选"],
+            onTabItemClick: handleTabItemClick
+          })
         ]);
       };
     }
@@ -1913,4 +1862,4 @@ This will fail in production if not fixed.`);
   __app__._component.render = () => {
   };
   __app__.mount("#app");
-})(Vue);
+})(Vue, uni.VueShared);
