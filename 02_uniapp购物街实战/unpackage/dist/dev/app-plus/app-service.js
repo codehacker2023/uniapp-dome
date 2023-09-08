@@ -53,7 +53,7 @@ if (uni.restoreGlobal) {
     }
     return target;
   };
-  const _sfc_main$6 = {
+  const _sfc_main$7 = {
     __name: "tab-control",
     props: {
       titles: {
@@ -95,7 +95,7 @@ if (uni.restoreGlobal) {
       };
     }
   };
-  const __easycom_0 = /* @__PURE__ */ _export_sfc(_sfc_main$6, [["__scopeId", "data-v-86d07902"], ["__file", "/Users/yihualiu/Documents/HBuilderProjects/02_uniapp购物街实战/components/tab-control/tab-control.vue"]]);
+  const __easycom_0 = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["__scopeId", "data-v-86d07902"], ["__file", "/Users/yihualiu/Documents/HBuilderProjects/02_uniapp购物街实战/components/tab-control/tab-control.vue"]]);
   var isVue2 = false;
   function set(target, key, val) {
     if (Array.isArray(target)) {
@@ -1752,22 +1752,79 @@ This will fail in production if not fixed.`);
       }
     }
   });
+  const _sfc_main$6 = {
+    __name: "home-banner",
+    props: {
+      banners: {
+        type: Array,
+        default: () => []
+      }
+    },
+    emits: ["bannerItemClick"],
+    setup(__props, { emit }) {
+      function handleItemClick(item) {
+        emit("bannerItemClick", item.link);
+      }
+      return (_ctx, _cache) => {
+        return vue.openBlock(), vue.createElementBlock("swiper", {
+          class: "banner",
+          "indicator-dots": true,
+          "indicator-active-color": "#ff8198",
+          autoplay: true,
+          circular: true,
+          interval: 3e3,
+          duration: 1e3
+        }, [
+          (vue.openBlock(true), vue.createElementBlock(
+            vue.Fragment,
+            null,
+            vue.renderList(__props.banners, (item) => {
+              return vue.openBlock(), vue.createElementBlock("swiper-item", {
+                key: item,
+                onClick: ($event) => handleItemClick(item)
+              }, [
+                vue.createElementVNode("image", {
+                  class: "image",
+                  src: item.image,
+                  mode: "widthFix"
+                }, null, 8, ["src"])
+              ], 8, ["onClick"]);
+            }),
+            128
+            /* KEYED_FRAGMENT */
+          ))
+        ]);
+      };
+    }
+  };
+  const HomeBanner = /* @__PURE__ */ _export_sfc(_sfc_main$6, [["__scopeId", "data-v-945d8e98"], ["__file", "/Users/yihualiu/Documents/HBuilderProjects/02_uniapp购物街实战/pages/home/cpns/home-banner.vue"]]);
   const _sfc_main$5 = {
     __name: "home",
     setup(__props) {
       const homeStore = useHomeStore();
-      storeToRefs(homeStore);
+      const {
+        banners,
+        recommends
+      } = storeToRefs(homeStore);
       onLoad(() => {
         homeStore.fetchHomeMutidataAction();
       });
+      function handleBannerItemClick(link) {
+        uni.navigateTo({
+          url: "/pages/webview/webview?link=" + link
+        });
+      }
       function handleTabItemClick(index) {
-        formatAppLog("log", "at pages/home/home.vue:52", index);
+        formatAppLog("log", "at pages/home/home.vue:57", index);
       }
       return (_ctx, _cache) => {
         const _component_tab_control = resolveEasycom(vue.resolveDynamicComponent("tab-control"), __easycom_0);
         return vue.openBlock(), vue.createElementBlock("view", { class: "home" }, [
           vue.createCommentVNode(" 轮播图组件 "),
-          vue.createCommentVNode(' <home-banner :banners="banners" @bannerItemClick="handleBannerItemClick"></home-banner> '),
+          vue.createVNode(HomeBanner, {
+            banners: vue.unref(banners),
+            onBannerItemClick: handleBannerItemClick
+          }, null, 8, ["banners"]),
           vue.createCommentVNode(" 推荐栏组件 "),
           vue.createCommentVNode(' <home-recommens :recommends="recommends" @itemClik="handleItemClick"></home-recommens> '),
           vue.createCommentVNode(' <view class="popularTitle">本周流行</view> '),

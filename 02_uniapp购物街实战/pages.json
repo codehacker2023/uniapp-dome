@@ -1,5 +1,6 @@
 {
-	"pages": [{
+	"pages": [
+		{
 			"path": "pages/home/home",
 			"style": {
 				"navigationBarTitleText": "首页",
@@ -33,7 +34,30 @@
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false
 			}
-
+		},
+		{
+			"path": "pages/my",
+			"style": {
+				"navigationBarTitleText": "my"
+			}
+		},
+		{
+			"path": "pages/我们",
+			"style": {
+				"navigationBarTitleText": "we"
+			}
+		},
+		{
+			"path": "pages/nihao",
+			"style": {
+				"navigationBarTitleText": "我"
+			}
+		},
+		{
+			"path": "pages/helo",
+			"style": {
+				"navigationBarTitleText": "我的"
+			}
 		}
 	],
 	"globalStyle": {
@@ -44,7 +68,8 @@
 	},
 	"tabBar": {
 		"selectedColor": "#FF8198",
-		"list": [{
+		"list": [
+			{
 				"text": "首页",
 				"iconPath": "static/images/tabbar/home.png",
 				"selectedIconPath": "static/images/tabbar/home_active.png",
@@ -69,5 +94,24 @@
 				"pagePath": "pages/profile/profile"
 			}
 		]
-	}
+	},
+	"subPackages": [
+		{
+			"root": "pages",
+			"pages": [
+				{
+					"path": "my",
+					"style": {
+						"navigationBarTitleText": "我的"
+					}
+				},
+				{
+					"path": "my",
+					"style": {
+						"navigationBarTitleText": "我的"
+					}
+				}
+			]
+		}
+	]
 }
